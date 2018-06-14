@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.kslau.nexus.mydeliveries.UI.DeliveryDetail.DeliveryDetailViewModel" />
+            type="com.kslau.nexus.mydeliveries.UI.Main.MainViewModel" />
     </data>
 
     <LinearLayout

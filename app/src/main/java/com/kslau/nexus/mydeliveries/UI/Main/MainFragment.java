@@ -36,7 +36,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mMainViewModel.start();
+        mMainViewModel.startMain();
     }
 
     @Nullable

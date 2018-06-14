@@ -24,13 +24,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.kslau.nexus.mydeliveries.Model.DeliveryModel;
 import com.kslau.nexus.mydeliveries.Model.LocationModel;
 import com.kslau.nexus.mydeliveries.R;
+import com.kslau.nexus.mydeliveries.UI.Main.MainActivity;
+import com.kslau.nexus.mydeliveries.UI.Main.MainViewModel;
 import com.kslau.nexus.mydeliveries.databinding.FragmentDeliveryDetailBinding;
 
 public class DeliveryDetailFragment extends Fragment {
     public static final String TAG = "DeliveryDetailFragment";
     public static final String ARGUMENT_DELIVERY_ID = "DELIVERY_ID";
 
-    private DeliveryDetailViewModel mDeliveryDetailViewModel;
+    private MainViewModel mMainViewModel;
     private FragmentDeliveryDetailBinding mFragmentDeliveryDetailBinding;
 
 
@@ -40,6 +42,21 @@ public class DeliveryDetailFragment extends Fragment {
         DeliveryDetailFragment fragment = new DeliveryDetailFragment();
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    public void update(String deliveryId){
+        if (deliveryId != null){
+            Bundle arguments = getArguments();
+            arguments.putString(ARGUMENT_DELIVERY_ID, deliveryId);
+
+            mMainViewModel.updateDetail(deliveryId, new MainViewModel.onDeliveryLoadedCallback() {
+                @Override
+                public void onMapLoad(DeliveryModel deliveryModel) {
+                    setupMap(deliveryModel);
+                }
+            });
+        }
+
     }
 
 
@@ -52,7 +69,7 @@ public class DeliveryDetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_direction:
-                DeliveryModel model = mDeliveryDetailViewModel.item.get();
+                DeliveryModel model = mMainViewModel.item.get();
                 if (model != null) {
                     Uri gmmIntentUri = Uri.parse("google.navigation:q=" + model.getLocation().getLat() +","+model.getLocation().getLng());
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -67,12 +84,15 @@ public class DeliveryDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mDeliveryDetailViewModel.start(getArguments().getString(ARGUMENT_DELIVERY_ID), new DeliveryDetailViewModel.onDeliveryLoadedCallback() {
-            @Override
-            public void onMapLoad(DeliveryModel deliveryModel) {
-                setupMap(deliveryModel);
-            }
-        });
+        String deliveryId = getArguments().getString(ARGUMENT_DELIVERY_ID);
+        if (deliveryId != null){
+            mMainViewModel.updateDetail(deliveryId, new MainViewModel.onDeliveryLoadedCallback() {
+                @Override
+                public void onMapLoad(DeliveryModel deliveryModel) {
+                    setupMap(deliveryModel);
+                }
+            });
+        }
     }
 
     @Nullable
@@ -80,8 +100,8 @@ public class DeliveryDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mFragmentDeliveryDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_delivery_detail, container, false);
 
-        mDeliveryDetailViewModel = DeliveryDetailActivity.obtainViewModel(getActivity());
-        mFragmentDeliveryDetailBinding.setViewModel(mDeliveryDetailViewModel);
+        mMainViewModel = MainActivity.obtainViewModel(getActivity());
+        mFragmentDeliveryDetailBinding.setViewModel(mMainViewModel);
         setHasOptionsMenu(true);
         return mFragmentDeliveryDetailBinding.getRoot();
     }

@@ -37,8 +37,28 @@ public class MainViewModel extends AndroidViewModel {
         mDeliveriesRepository = deliveriesRepository;
     }
 
-    public void start() {
+    public void startMain() {
         loadDeliveries(false);
+    }
+
+
+    public void updateDetail(String deliveryId, final MainViewModel.onDeliveryLoadedCallback callback) {
+        if (deliveryId != null) {
+            mDeliveriesRepository.getDelivery(deliveryId, new DeliveriesDataSource.GetDeliveryCallback() {
+                @Override
+                public void onDeliveryLoaded(DeliveryModel deliveryModel) {
+                    item.set(deliveryModel);
+                    callback.onMapLoad(deliveryModel);
+                    mIsDataLoadingError.set(false);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    item.set(null);
+                    mIsDataLoadingError.set(true);
+                }
+            });
+        }
     }
 
     private void loadDeliveries(boolean forceUpdate) {
@@ -118,5 +138,9 @@ public class MainViewModel extends AndroidViewModel {
             }
             throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
         }
+    }
+
+    public interface onDeliveryLoadedCallback {
+        void onMapLoad(DeliveryModel deliveryModel);
     }
 }
