@@ -4,14 +4,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.kslau.nexus.mydeliveries.ApiClient.MassiveInfinityClient;
 import com.kslau.nexus.mydeliveries.Model.DeliveryModel;
+import com.kslau.nexus.mydeliveries.Source.DeliveriesDataSource;
+import com.kslau.nexus.mydeliveries.Source.DeliveriesRepository;
+import com.kslau.nexus.mydeliveries.Source.Local.DeliveriesDatabase;
+import com.kslau.nexus.mydeliveries.Source.Local.DeliveriesLocalDataSource;
+import com.kslau.nexus.mydeliveries.Source.Remote.DeliveriesRemoteDataSource;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,18 +22,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        Call<List<DeliveryModel>> getDeliveryCall = MassiveInfinityClient.get().getDeliveries();
-        getDeliveryCall.enqueue(new Callback<List<DeliveryModel>>() {
-            @Override
-            public void onResponse(Call<List<DeliveryModel>> call, Response<List<DeliveryModel>> response) {
+        final DeliveriesDatabase database = DeliveriesDatabase.getInstance(this);
 
-//                Log.d(TAG, response.body().toString());
-            }
+        DeliveriesRepository.getInstance(DeliveriesRemoteDataSource.getInstance(),
+                DeliveriesLocalDataSource.getInstance(database.deliveryDao(), new AppExecutors()))
+                .getDeliveries(new DeliveriesDataSource.LoadDeliveriesCallback() {
+                    @Override
+                    public void onDeliveriesLoaded(List<DeliveryModel> modelList) {
+                        Log.d(TAG, modelList.toString());
+                    }
 
-            @Override
-            public void onFailure(Call<List<DeliveryModel>> call, Throwable t) {
+                    @Override
+                    public void onDataNotAvailable() {
+                        Log.d(TAG, "empty");
 
-            }
-        });
+                    }
+                });
     }
 }
