@@ -9,7 +9,7 @@ import java.util.List;
 
 public class DeliveriesListBindings {
 
-    @BindingAdapter("app:items")
+    @BindingAdapter("items")
     public static void setItems(ListView listView, List<DeliveryModel> items) {
         MainDeliveriesAdapter adapter = (MainDeliveriesAdapter) listView.getAdapter();
         if (adapter != null) {

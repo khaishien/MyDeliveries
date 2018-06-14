@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.kslau.nexus.mydeliveries.UI.DeliveryDetail.DeliveryDetailViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/deliveriesContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:background="@color/colorPrimaryDark"
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="?android:attr/listPreferredItemHeight"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimaryDark"
             android:orientation="horizontal"
             android:paddingBottom="8dp"
             android:paddingLeft="16dp"
@@ -28,8 +38,9 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="45dp"
-                android:layout_height="45dp" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:imageUrl="@{viewModel.item.imageUrl}" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,5 +70,5 @@
             </LinearLayout>
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 </layout>

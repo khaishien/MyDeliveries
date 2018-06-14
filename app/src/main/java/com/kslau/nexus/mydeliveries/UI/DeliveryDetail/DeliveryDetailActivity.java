@@ -4,10 +4,15 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.kslau.nexus.mydeliveries.AppExecutors;
 import com.kslau.nexus.mydeliveries.R;
 import com.kslau.nexus.mydeliveries.Source.DeliveriesRepository;
@@ -31,6 +36,7 @@ public class DeliveryDetailActivity extends AppCompatActivity {
 
         setupToolbar();
         setupViewFragment();
+
 
     }
 

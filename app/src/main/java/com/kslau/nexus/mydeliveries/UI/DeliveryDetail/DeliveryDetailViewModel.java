@@ -14,6 +14,10 @@ import com.kslau.nexus.mydeliveries.Source.DeliveriesRepository;
 
 public class DeliveryDetailViewModel extends AndroidViewModel {
 
+    interface onDeliveryLoadedCallback {
+        void onMapLoad(DeliveryModel deliveryModel);
+    }
+
     private static final String TAG = "DeliveryDetailViewModel";
 
     public final ObservableField<DeliveryModel> item = new ObservableField<>();
@@ -26,12 +30,13 @@ public class DeliveryDetailViewModel extends AndroidViewModel {
         mDeliveriesRepository = deliveriesRepository;
     }
 
-    public void start(String deliveryId) {
+    public void start(String deliveryId, final onDeliveryLoadedCallback callback) {
         if (deliveryId != null) {
             mDeliveriesRepository.getDelivery(deliveryId, new DeliveriesDataSource.GetDeliveryCallback() {
                 @Override
                 public void onDeliveryLoaded(DeliveryModel deliveryModel) {
                     item.set(deliveryModel);
+                    callback.onMapLoad(deliveryModel);
                     mIsDataLoadingError.set(false);
                 }
 

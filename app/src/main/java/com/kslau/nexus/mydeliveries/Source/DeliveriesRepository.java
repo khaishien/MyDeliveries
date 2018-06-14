@@ -17,6 +17,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DeliveriesRepository implements DeliveriesDataSource {
 
+    public static final String TAG = "DeliveriesRepository";
     private volatile static DeliveriesRepository sInstance = null;
     private final DeliveriesDataSource mDeliveriesRemoteDataSource;
     private final DeliveriesDataSource mDeliveriesLocalDataSource;
@@ -39,7 +40,7 @@ public class DeliveriesRepository implements DeliveriesDataSource {
         if (sInstance == null) {
             synchronized (DeliveriesRepository.class) {
                 if (sInstance == null) {
-                    sInstance = new DeliveriesRepository(deliveriesRemoteDataSource, deliveriesLocalDataSource,context);
+                    sInstance = new DeliveriesRepository(deliveriesRemoteDataSource, deliveriesLocalDataSource, context);
                 }
             }
         }
@@ -63,10 +64,10 @@ public class DeliveriesRepository implements DeliveriesDataSource {
             // If the cache is dirty we need to fetch new data from the network.
             mDeliveriesRemoteDataSource.getDeliveries((new LoadDeliveriesCallback() {
                 @Override
-                public void onDeliveriesLoaded(List<DeliveryModel> tasks) {
+                public void onDeliveriesLoaded(List<DeliveryModel> deliveryModels) {
 
-                    refreshCache(tasks);
-                    refreshLocalDataSource(tasks);
+                    refreshLocalDataSource(deliveryModels);
+                    refreshCache(deliveryModels);
 
                     callback.onDeliveriesLoaded(new ArrayList<>(mCachedDeliveries.values()));
                 }
@@ -85,10 +86,10 @@ public class DeliveriesRepository implements DeliveriesDataSource {
             // Query the local storage if available. If not, query the network.
             mDeliveriesLocalDataSource.getDeliveries(new LoadDeliveriesCallback() {
                 @Override
-                public void onDeliveriesLoaded(List<DeliveryModel> tasks) {
+                public void onDeliveriesLoaded(List<DeliveryModel> deliveryModels) {
 
-                    refreshCache(tasks);
-                    refreshLocalDataSource(tasks);
+                    refreshLocalDataSource(deliveryModels);
+                    refreshCache(deliveryModels);
 
                     callback.onDeliveriesLoaded(new ArrayList<>(mCachedDeliveries.values()));
                 }
@@ -161,8 +162,10 @@ public class DeliveriesRepository implements DeliveriesDataSource {
             mCachedDeliveries = new LinkedHashMap<>();
         }
         mCachedDeliveries.clear();
-        for (DeliveryModel model : deliveryModels) {
-            mCachedDeliveries.put(String.valueOf(model.getId()), model);
+        for (int i = 0; i < deliveryModels.size(); i++) {
+            DeliveryModel model = deliveryModels.get(i);
+            model.setId(i);
+            mCachedDeliveries.put(String.valueOf(i), model);
         }
         mCacheIsDirty = false;
     }
