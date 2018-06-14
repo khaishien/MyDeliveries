@@ -1,5 +1,6 @@
 package com.kslau.nexus.mydeliveries.Source;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,6 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import Utils.GeneralUtils;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DeliveriesRepository implements DeliveriesDataSource {
@@ -17,22 +20,26 @@ public class DeliveriesRepository implements DeliveriesDataSource {
     private volatile static DeliveriesRepository sInstance = null;
     private final DeliveriesDataSource mDeliveriesRemoteDataSource;
     private final DeliveriesDataSource mDeliveriesLocalDataSource;
+    private Context mContext;
 
     Map<String, DeliveryModel> mCachedDeliveries;
     private boolean mCacheIsDirty = true;
 
     private DeliveriesRepository(@NonNull DeliveriesDataSource deliveriesRemoteDataSource,
-                                 @NonNull DeliveriesDataSource deliveriesLocalDataSource) {
+                                 @NonNull DeliveriesDataSource deliveriesLocalDataSource,
+                                 @NonNull Context context) {
         mDeliveriesRemoteDataSource = checkNotNull(deliveriesRemoteDataSource);
         mDeliveriesLocalDataSource = checkNotNull(deliveriesLocalDataSource);
+        mContext = context;
     }
 
     public static DeliveriesRepository getInstance(DeliveriesDataSource deliveriesRemoteDataSource,
-                                                   DeliveriesDataSource deliveriesLocalDataSource) {
+                                                   DeliveriesDataSource deliveriesLocalDataSource,
+                                                   Context context) {
         if (sInstance == null) {
             synchronized (DeliveriesRepository.class) {
                 if (sInstance == null) {
-                    sInstance = new DeliveriesRepository(deliveriesRemoteDataSource, deliveriesLocalDataSource);
+                    sInstance = new DeliveriesRepository(deliveriesRemoteDataSource, deliveriesLocalDataSource,context);
                 }
             }
         }
@@ -52,7 +59,7 @@ public class DeliveriesRepository implements DeliveriesDataSource {
             return;
         }
 
-        if (mCacheIsDirty) {
+        if (mCacheIsDirty && GeneralUtils.isOnline(mContext)) {
             // If the cache is dirty we need to fetch new data from the network.
             mDeliveriesRemoteDataSource.getDeliveries((new LoadDeliveriesCallback() {
                 @Override

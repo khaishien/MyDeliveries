@@ -8,7 +8,7 @@ import android.content.Context;
 import com.kslau.nexus.mydeliveries.Model.DeliveryModel;
 
 
-@Database(entities = {DeliveryModel.class}, version = 1)
+@Database(entities = {DeliveryModel.class}, version = 1,exportSchema = false)
 public abstract class DeliveriesDatabase extends RoomDatabase {
 
 

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.kslau.nexus.mydeliveries.UI.Main.MainViewModel" />
+    </data>
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:onRefreshListener="@{viewModel.onRefreshListener}"
+        app:refreshing="@{viewModel.dataLoading}">
+
+        <RelativeLayout
+            android:id="@+id/deliveriesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.empty ? View.GONE : View.VISIBLE}">
+
+                <ListView
+                    android:id="@+id/deliveries_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:items="@{viewModel.items}"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/noDeliveries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}">
+
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/noDeliveriesIcon"-->
+                    <!--android:layout_width="48dp"-->
+                    <!--android:layout_height="48dp"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:src="@{viewmodel.noTaskIconRes}" />-->
+
+                <TextView
+                    android:id="@+id/noDeliveriesMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:text="no items" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</layout>
