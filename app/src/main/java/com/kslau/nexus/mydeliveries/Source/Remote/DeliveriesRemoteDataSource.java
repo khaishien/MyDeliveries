@@ -66,7 +66,7 @@ public class DeliveriesRemoteDataSource implements DeliveriesDataSource {
     }
 
     @Override
-    public void refreshTasks() {
+    public void refreshDeliveries() {
 
     }
 }

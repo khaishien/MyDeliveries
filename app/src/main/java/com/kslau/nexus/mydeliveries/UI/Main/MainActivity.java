@@ -22,6 +22,7 @@ import Utils.ActivityUtils;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private MainViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setupToolbar();
-        setupViewFragment();
-        MainViewModel mViewModel = obtainViewModel(this);
+        setupMainViewFragment();
+        mViewModel = obtainViewModel(this);
 
         // Subscribe to "open task" event
         mViewModel.getOpenDeliveryEvent().observe(this, new Observer<String>() {
@@ -54,9 +55,8 @@ public class MainActivity extends AppCompatActivity {
         return viewModel;
     }
 
-    private void setupViewFragment() {
-        MainFragment mainFragment =
-                (MainFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+    private void setupMainViewFragment() {
+        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
         if (mainFragment == null) {
             // Create the fragment
             mainFragment = MainFragment.newInstance();
@@ -75,5 +75,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DeliveryDetailActivity.class);
         intent.putExtra(DeliveryDetailActivity.EXTRA_DELIVERY_ID, deliveryId);
         startActivity(intent);
+
     }
+
 }

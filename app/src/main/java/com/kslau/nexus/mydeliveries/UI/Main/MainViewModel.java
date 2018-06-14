@@ -6,10 +6,10 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 
 import com.kslau.nexus.mydeliveries.Model.DeliveryModel;
 import com.kslau.nexus.mydeliveries.SingleLiveEvent;
@@ -23,6 +23,7 @@ public class MainViewModel extends AndroidViewModel {
     private static final String TAG = "MainViewModel";
 
     public final ObservableList<DeliveryModel> items = new ObservableArrayList<>();
+    public final ObservableField<DeliveryModel> item = new ObservableField<>();
     public final ObservableBoolean dataLoading = new ObservableBoolean(false);
     public final ObservableBoolean empty = new ObservableBoolean(false);
     private final ObservableBoolean mIsDataLoadingError = new ObservableBoolean(false);
@@ -43,7 +44,7 @@ public class MainViewModel extends AndroidViewModel {
         loadDeliveries(false);
     }
 
-    public void loadDeliveries(boolean forceUpdate) {
+    private void loadDeliveries(boolean forceUpdate) {
         loadDeliveries(forceUpdate, true);
     }
 
@@ -52,7 +53,7 @@ public class MainViewModel extends AndroidViewModel {
             dataLoading.set(true);
         }
         if (forceUpdate) {
-            mDeliveriesRepository.refreshTasks();
+            mDeliveriesRepository.refreshDeliveries();
         }
 
         mDeliveriesRepository.getDeliveries(new DeliveriesDataSource.LoadDeliveriesCallback() {
@@ -79,7 +80,6 @@ public class MainViewModel extends AndroidViewModel {
             @Override
             public void onRefresh() {
                 loadDeliveries(true, true);
-                Log.d(TAG, "refresh");
             }
         };
     }

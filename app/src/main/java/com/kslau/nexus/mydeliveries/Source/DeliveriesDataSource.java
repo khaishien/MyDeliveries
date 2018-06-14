@@ -30,5 +30,5 @@ public interface DeliveriesDataSource {
 
     void deleteAllDeliveries();
 
-    void refreshTasks();
+    void refreshDeliveries();
 }

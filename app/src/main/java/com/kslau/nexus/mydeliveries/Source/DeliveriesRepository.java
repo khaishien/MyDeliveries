@@ -142,7 +142,7 @@ public class DeliveriesRepository implements DeliveriesDataSource {
     }
 
     @Override
-    public void refreshTasks() {
+    public void refreshDeliveries() {
         mCacheIsDirty = true;
     }
 

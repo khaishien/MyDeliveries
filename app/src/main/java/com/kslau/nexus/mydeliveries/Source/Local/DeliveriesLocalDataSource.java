@@ -104,7 +104,7 @@ public class DeliveriesLocalDataSource implements DeliveriesDataSource {
     }
 
     @Override
-    public void refreshTasks() {
+    public void refreshDeliveries() {
 
     }
 
