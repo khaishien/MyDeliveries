@@ -11,14 +11,13 @@ public interface DeliveriesDataSource {
     interface LoadDeliveriesCallback {
 
         void onDeliveriesLoaded(List<DeliveryModel> modelList);
-
-        void onDataNotAvailable();
+        void onServiceCallFailed();
+        void onDataEmpty();
     }
 
     interface GetDeliveryCallback {
 
         void onDeliveryLoaded(DeliveryModel deliveryModel);
-
         void onDataNotAvailable();
     }
 

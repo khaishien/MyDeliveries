@@ -15,9 +15,9 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         app:onRefreshListener="@{viewModel.onRefreshListener}"
         app:refreshing="@{viewModel.dataLoading}">
 
@@ -29,6 +29,22 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.mIsDataLoadingError ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                    android:id="@+id/errorDeliveriesMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:text="error retrieve data" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -38,8 +54,11 @@
                     android:id="@+id/deliveries_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:items="@{viewModel.items}"/>
+                    android:divider="@drawable/list_view_divider"
+                    android:dividerHeight="1px"
+                    app:items="@{viewModel.items}" />
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/noDeliveries"
@@ -51,11 +70,11 @@
 
 
                 <!--<ImageView-->
-                    <!--android:id="@+id/noDeliveriesIcon"-->
-                    <!--android:layout_width="48dp"-->
-                    <!--android:layout_height="48dp"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:src="@{viewmodel.noTaskIconRes}" />-->
+                <!--android:id="@+id/noDeliveriesIcon"-->
+                <!--android:layout_width="48dp"-->
+                <!--android:layout_height="48dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:src="@{viewmodel.noTaskIconRes}" />-->
 
                 <TextView
                     android:id="@+id/noDeliveriesMain"

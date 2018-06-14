@@ -73,6 +73,7 @@ public class DeliveryDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         ActionBar ab = getSupportActionBar();
+        ab.setTitle("Delivery Detail");
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
     }

@@ -6,6 +6,7 @@ import com.kslau.nexus.mydeliveries.ApiClient.MassiveInfinityClient;
 import com.kslau.nexus.mydeliveries.Model.DeliveryModel;
 import com.kslau.nexus.mydeliveries.Source.DeliveriesDataSource;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +42,13 @@ public class DeliveriesRemoteDataSource implements DeliveriesDataSource {
             @Override
             public void onResponse(@NonNull Call<List<DeliveryModel>> call, @NonNull Response<List<DeliveryModel>> response) {
                 callback.onDeliveriesLoaded(response.body());
+//                callback.onDeliveriesLoaded(new ArrayList<DeliveryModel>());
+//                callback.onServiceCallFailed();
             }
 
             @Override
             public void onFailure(Call<List<DeliveryModel>> call, Throwable t) {
-                callback.onDataNotAvailable();
+                callback.onServiceCallFailed();
             }
         });
     }

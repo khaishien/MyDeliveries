@@ -72,8 +72,13 @@ public class DeliveriesRepository implements DeliveriesDataSource {
                 }
 
                 @Override
-                public void onDataNotAvailable() {
-                    callback.onDataNotAvailable();
+                public void onServiceCallFailed() {
+                    callback.onServiceCallFailed();
+                }
+
+                @Override
+                public void onDataEmpty() {
+                    callback.onDataEmpty();
                 }
             }));
         } else {
@@ -89,8 +94,13 @@ public class DeliveriesRepository implements DeliveriesDataSource {
                 }
 
                 @Override
-                public void onDataNotAvailable() {
-                    callback.onDataNotAvailable();
+                public void onServiceCallFailed() {
+                    callback.onServiceCallFailed();
+                }
+
+                @Override
+                public void onDataEmpty() {
+                    callback.onDataEmpty();
                 }
             });
         }

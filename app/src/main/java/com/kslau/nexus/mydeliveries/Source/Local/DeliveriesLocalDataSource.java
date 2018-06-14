@@ -43,7 +43,7 @@ public class DeliveriesLocalDataSource implements DeliveriesDataSource {
                     public void run() {
                         if (deliveryModels.isEmpty()) {
                             // This will be called if the table is new or just empty.
-                            callback.onDataNotAvailable();
+                            callback.onDataEmpty();
                         } else {
                             callback.onDeliveriesLoaded(deliveryModels);
                         }

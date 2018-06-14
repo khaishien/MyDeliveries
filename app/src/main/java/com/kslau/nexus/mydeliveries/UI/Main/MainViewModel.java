@@ -26,17 +26,14 @@ public class MainViewModel extends AndroidViewModel {
     public final ObservableField<DeliveryModel> item = new ObservableField<>();
     public final ObservableBoolean dataLoading = new ObservableBoolean(false);
     public final ObservableBoolean empty = new ObservableBoolean(false);
-    private final ObservableBoolean mIsDataLoadingError = new ObservableBoolean(false);
+    public final ObservableBoolean mIsDataLoadingError = new ObservableBoolean(false);
     private final SingleLiveEvent<String> mOpenDeliveryEvent = new SingleLiveEvent<>();
 
     private final DeliveriesRepository mDeliveriesRepository;
 
-//    @SuppressLint("StaticFieldLeak")
-//    private final Context mContext; // To avoid leaks, this must be an Application Context.
 
     public MainViewModel(@NonNull Application application, DeliveriesRepository deliveriesRepository) {
         super(application);
-//        mContext = application.getApplicationContext();
         mDeliveriesRepository = deliveriesRepository;
     }
 
@@ -69,9 +66,25 @@ public class MainViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void onDataNotAvailable() {
+            public void onServiceCallFailed() {
+                if (showLoadingUI) {
+                    dataLoading.set(false);
+                }
                 mIsDataLoadingError.set(true);
+                items.clear();
+                empty.set(false);
             }
+
+            @Override
+            public void onDataEmpty() {
+                if (showLoadingUI) {
+                    dataLoading.set(false);
+                }
+                mIsDataLoadingError.set(false);
+                items.clear();
+                empty.set(true);
+            }
+
         });
     }
 
